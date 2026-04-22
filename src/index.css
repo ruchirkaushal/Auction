@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+@theme {
+  --font-bebas: "Bebas Neue", sans-serif;
+  --font-rajdhani: "Rajdhani", sans-serif;
+  
+  --color-mi-primary: #004BA0;
+  --color-mi-secondary: #D1AB3E;
+  --color-csk-primary: #FFFF3C;
+  --color-csk-secondary: #0081E9;
+  --color-rcb-primary: #EC1C24;
+  --color-rcb-secondary: #000000;
+  --color-kkr-primary: #3A225D;
+  --color-kkr-secondary: #B3A123;
+  --color-dc-primary: #00008B;
+  --color-dc-secondary: #EF1C25;
+  --color-rr-primary: #EA1A85;
+  --color-rr-secondary: #254AA5;
+  --color-pbks-primary: #ED1B24;
+  --color-pbks-secondary: #A7A9AC;
+  --color-srh-primary: #F26522;
+  --color-srh-secondary: #000000;
+  --color-gt-primary: #1C1C1C;
+  --color-gt-secondary: #ADB6BE;
+  --color-lsg-primary: #A4DEBE;
+  --color-lsg-secondary: #536678;
+}
+
+body {
+  @apply bg-[#050a14] text-white font-rajdhani overflow-hidden overscroll-none select-none;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(20, 30, 60, 0.5) 0%, transparent 100%),
+    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3, h4 {
+  @apply font-bebas tracking-wider;
+}
+
+.glass-panel {
+  @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-xl;
+}
+
+.team-card-glow {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.team-card-glow.active {
+  @apply border-green-500/50 bg-green-500/10;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+  animation: team-glow-pulse 1s ease-in-out infinite;
+}
+
+@keyframes team-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.6);
+    transform: scale(1.02);
+  }
+}
+
+.bid-number {
+  @apply font-bebas text-4xl sm:text-6xl tabular-nums;
+  text-shadow: 0 0 20px rgba(209, 171, 62, 0.5);
+  animation: bid-pulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bid-pulse {
+  0% { 
+    transform: scale(0.9);
+    text-shadow: 0 0 10px rgba(209, 171, 62, 0.3);
+  }
+  50% { 
+    transform: scale(1.15);
+    text-shadow: 0 0 30px rgba(209, 171, 62, 0.8);
+  }
+  100% { 
+    transform: scale(1);
+    text-shadow: 0 0 20px rgba(209, 171, 62, 0.5);
+  }
+}
+
+@keyframes pulse-red {
+  0%, 100% { background-color: rgba(239, 68, 68, 0.5); }
+  50% { background-color: rgba(239, 68, 68, 0.8); }
+}
+
+.timer-critical {
+  animation: pulse-red 1s infinite;
+}
+
+@keyframes timer-warn {
+  0%, 100% {
+    box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.6);
+  }
+}
+
+.timer-danger {
+  animation: timer-warn 0.5s infinite;
+}
+
+/* Button press animation */
+@keyframes button-press {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.btn-press:active {
+  animation: button-press 0.3s ease-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-white/20 rounded-full hover:bg-white/30;
+}
+
+.sold-banner {
+  @apply fixed inset-0 flex items-center justify-center z-50 pointer-events-none;
+}
+
+.confetti {
+  @apply absolute w-2 h-2 rounded-full;
+}
+
+/* Mobile specific tweaks */
+@media (max-width: 640px) {
+  .bid-button {
+    @apply py-4 text-xl; /* Larger touch target */
+  }
+}
