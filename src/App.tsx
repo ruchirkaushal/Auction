@@ -308,6 +308,11 @@ function AppContent() {
              setShowSoldBanner(null);
              setBidCount(0);
           }
+          
+          if (state.auctionState.currentPlayerIndex >= prev.auctionQueue.length) {
+             return { ...prev, step: 'summary' };
+          }
+
           return {
              ...prev,
              currentPlayerIndex: state.auctionState.currentPlayerIndex,

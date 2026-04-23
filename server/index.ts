@@ -46,6 +46,7 @@ interface Room {
   auctionState: AuctionState;
   timerInterval: NodeJS.Timeout | null;
   autoAdvanceTimeout: NodeJS.Timeout | null;
+  teamPurses: Map<string, number>;
 }
 
 const rooms = new Map<string, Room>();
@@ -84,7 +85,8 @@ io.on('connection', (socket: Socket) => {
         timer: 5,
       },
       timerInterval: null,
-      autoAdvanceTimeout: null
+      autoAdvanceTimeout: null,
+      teamPurses: new Map<string, number>()
     };
 
     // Add host user
@@ -220,7 +222,11 @@ io.on('connection', (socket: Socket) => {
     if (!room || !room.auctionState.isStarted) return;
 
     const user = room.users.get(socket.id);
-    if (!user) return;
+    if (!user || !user.teamId) return;
+
+    // Check if team has enough purse (initial purse is 12000, 120 Crores)
+    const currentPurse = room.teamPurses.get(user.teamId) ?? 12000;
+    if (data.bid > currentPurse) return; // Prevent race conditions or cheating
 
     if (data.bid > room.auctionState.currentBid) {
       room.auctionState.currentBid = data.bid;
@@ -290,6 +296,13 @@ io.on('connection', (socket: Socket) => {
         }
         
         if (room.auctionState.highestBidderId) {
+           // Find the teamId of the highest bidder
+           const winner = Array.from(room.users.values()).find(u => u.userId === room.auctionState.highestBidderId);
+           if (winner && winner.teamId) {
+              const currentPurse = room.teamPurses.get(winner.teamId) ?? 12000;
+              room.teamPurses.set(winner.teamId, currentPurse - room.auctionState.currentBid);
+           }
+           
            io.to(roomId).emit('player_sold', {
              userId: room.auctionState.highestBidderId,
              username: room.auctionState.highestBidderName,
